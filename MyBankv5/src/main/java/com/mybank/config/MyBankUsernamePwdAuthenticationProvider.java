@@ -4,7 +4,6 @@ package com.mybank.config;
 import com.mybank.model.Customer;
 import com.mybank.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,7 +33,7 @@ public class MyBankUsernamePwdAuthenticationProvider implements AuthenticationPr
         String pwd = authentication.getCredentials().toString();
         List<Customer> customer = customerRepository.findByEmail(username);
         if (!customer.isEmpty()) {
-            if (passwordEncoder.matches(pwd, customer.get(0).getPwd())) {
+            if (passwordEncoder.matches(pwd, customer.getFirst().getPwd())) {
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority(customer.get(0).getRole()));
                 return new UsernamePasswordAuthenticationToken(username, pwd, authorities);
